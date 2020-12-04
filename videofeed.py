@@ -85,7 +85,7 @@ class VideoFeed:
         cv2_im = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         pil_im = Image.fromarray(cv2_im)
         b = io.BytesIO()
-        pil_im.save(b, 'jpeg')
+        pil_im.save(b, 'jpeg', quality=50)
         im_bytes = b.getvalue()
         return im_bytes
 
