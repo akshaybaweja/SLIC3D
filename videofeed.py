@@ -29,7 +29,6 @@ class VideoFeed:
         cv2.waitKey(1)
         # cv2.imshow('my webcam', img)
 
-        cv2.resize(img, (640, 480),  interpolation = cv2.INTER_NEAREST)
         cv2_im = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         pil_im = Image.fromarray(cv2_im)
         b = io.BytesIO()
@@ -55,7 +54,8 @@ class VideoFeed:
         else:
             # print("hello")
             mergedImage = upperImage
-            
+        
+        cv2.resize(mergedImage, (640, 480),  interpolation = cv2.INTER_NEAREST)
         return mergedImage
     
     def getFaceSlice(self, img, getUpper = True):
