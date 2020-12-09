@@ -38,6 +38,11 @@ class VideoFeed:
 
     def merge_images(self, upperImage, lowerImage):
 
+        upperImageSliced = None
+        lowerImageSliced = None
+        upperFaceArea = None
+        lowerFaceArea = None
+
         try:
             upperImageSliced, upperFaceArea = self.getFaceSlice(upperImage)
             lowerImageSliced, lowerFaceArea = self.getFaceSlice(lowerImage, False)
