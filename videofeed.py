@@ -54,15 +54,15 @@ class VideoFeed:
                 if upperFaceArea < lowerFaceArea:
                     # Scale up upper face area
                     scale_percent = lowerFaceArea/upperFaceArea # percent of original size
-                    width = int(img.shape[1] * scale_percent)
-                    height = int(img.shape[0] * scale_percent)
+                    width = int(upperImageSliced.shape[1] * scale_percent)
+                    height = int(upperImageSliced.shape[0] * scale_percent)
                     dim = (width, height)
                     cv2.resize(upperImageSliced, dim, interpolation = cv2.INTER_AREA)
                 elif lowerFaceArea < upperFaceArea:
                     # Scale up lower face area
                     scale_percent = upperFaceArea/lowerFaceArea # percent of original size
-                    width = int(img.shape[1] * scale_percent)
-                    height = int(img.shape[0] * scale_percent)
+                    width = int(lowerImageSliced.shape[1] * scale_percent)
+                    height = int(lowerImageSliced.shape[0] * scale_percent)
                     dim = (width, height)
                     cv2.resize(lowerImageSliced, dim, interpolation = cv2.INTER_AREA)
                 mergedImage = np.vstack((upperImageSliced, lowerImageSliced))
