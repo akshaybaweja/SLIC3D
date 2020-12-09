@@ -54,12 +54,10 @@ class VideoFeed:
             if upperImageSliced.ndim is not 0 and lowerImageSliced.ndim is not 0:
                 if upperFaceArea < lowerFaceArea:
                     # Scale up upper face area
-                    d = lowerFaceArea/upperFaceArea
-                    cv2.resize(upperImageSliced, 0, 0, d, d)
+                    cv2.resize(upperImageSliced, lowerFaceArea/upperFaceArea, interpolation = cv2.INTER_AREA)
                 elif lowerFaceArea < upperFaceArea:
                     # Scale up lower face area
-                    d = upperFaceArea/lowerFaceArea
-                    cv2.resize(lowerImageSliced, 0, 0, d, d)
+                    cv2.resize(lowerImageSliced, upperFaceArea/lowerFaceArea, interpolation = cv2.INTER_AREA)
                 mergedImage = np.vstack((upperImageSliced, lowerImageSliced))
                 # print("Shukar hai rabba")
         elif upperImageSliced is not None and lowerImageSliced is None:
