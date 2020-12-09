@@ -38,11 +38,17 @@ class VideoFeed:
 
     def merge_images(self, upperImage, lowerImage):
 
-        upperImageSliced = self.getFaceSlice(upperImage)
-        lowerImageSliced = self.getFaceSlice(lowerImage, False)
+        upperImageSliced, upperFaceArea = self.getFaceSlice(upperImage)
+        lowerImageSliced, lowerFaceArea = self.getFaceSlice(lowerImage, False)
 
         if upperImageSliced is not None and lowerImageSliced is not None:
             if upperImageSliced.ndim is not 0 and lowerImageSliced.ndim is not 0:
+                if upperFaceArea < lowerFaceArea:
+                    # Scale up upper face area
+                    cv2.resize(upperImageSliced, 0, 0, lowerFaceArea/upperFaceArea, interpolation = cv2.INTER_NEAREST)
+                elif lowerFaceArea < upperFaceArea:
+                    # Scale up lower face area
+                    cv2.resize(lowerImageSliced, 0, 0, upperFaceArea/lowerFaceArea, interpolation = cv2.INTER_NEAREST)
                 mergedImage = np.vstack((upperImageSliced, lowerImageSliced))
                 # print("Shukar hai rabba")
         elif upperImageSliced is not None and lowerImageSliced is None:
@@ -65,24 +71,21 @@ class VideoFeed:
         rects = self.detector(gray, 0)
         
         for (i, rect) in enumerate(rects):
-            # face_bb = face_utils.rect_to_bb(rect)
             shape = self.predictor(gray, rect)
             
+            face_bb = face_utils.rect_to_bb(rect)
             upperFace_bb = [(0,0), (img.shape[1],shape.part(30).y)]
             lowerFace_bb = [(0,shape.part(30).y), (img.shape[1],img.shape[0])]
 
+            face_area = face_bb[2] * face_bb[3]
+            image_area = img.shape[0] * img.shape[1]
+            percent_area = face_area/image_area*100
+
             if getUpper:
-                # cv2.rectangle(img, lowerFace_bb[0], lowerFace_bb[1], (0,0,0), -1)
-                return img[0:shape.part(30).y, 0:img.shape[1]]
+                return [img[0:shape.part(30).y, 0:img.shape[1]], percent_area]
             else:
-                # cv2.rectangle(img, upperFace_bb[0], upperFace_bb[1], (0,0,0), -1)
-                return img[shape.part(30).y:img.shape[0], 0:img.shape[1]]
+                return [img[shape.part(30).y:img.shape[0], 0:img.shape[1]], percent_area]
 
-            # return img
-
-            # cv2.rectangle(img, face_bb, (0,255,0), 2)
-            # cv2.line(img, (0, shape.part(30).y), (img.shape[1],shape.part(30).y),(255,0,0), 2)
-            # cv2.circle(img, (shape.part(30).x, shape.part(30).y), 2, (0, 0, 255), 2)
         # -------- END OPEN CV ---------- 
 
     def set_frame(self, frame_bytes, frame_bytes_self):
