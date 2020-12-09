@@ -14,8 +14,8 @@ class Client:
     def connect(self):
         while True:
             sendFrame=self.videofeed.get_frame()
-            vsock.vsend(sendFrame)
-            frame=vsock.vreceive()
+            self.vsock.vsend(sendFrame)
+            frame=self.vsock.vreceive()
             self.videofeed.set_frame(frame, sendFrame)
 
 if __name__ == "__main__":
