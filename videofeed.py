@@ -45,13 +45,15 @@ class VideoFeed:
         if upperImageSliced is not None and lowerImageSliced is not None:
             if upperImageSliced.ndim is not 0 and lowerImageSliced.ndim is not 0:
                 mergedImage = np.vstack((upperImageSliced, lowerImageSliced))
-                print("Shukar hai rabba")
+[+][]                # print("Shukar hai rabba")
         elif upperImageSliced is not None and lowerImageSliced is None:
-            print("upperImageSliced - None nhi hai")
+            # print("upperImageSliced - None nhi hai")
+            mergedImage = upperImage
         elif upperImageSliced is not None and lowerImageSliced is None:
-            print("lowerImageSliced - None nhi hai")
+            # print("lowerImageSliced - None nhi hai")
+            mergedImage = lowerImage
         else:
-            print("hello")
+            # print("hello")
             mergedImage = upperImage
             
         return mergedImage
@@ -92,7 +94,7 @@ class VideoFeed:
         pil_image_self = Image.open(pil_bytes_self)
         cv_image_self = cv2.cvtColor(np.array(pil_image_self), cv2.COLOR_RGB2BGR)
 
-        cv_image = self.merge_images(cv_image_remote, cv_image_self)
+        cv_image = self.merge_images(cv_image_self, cv_image_remote)
         cv2.imshow(self.name, cv_image)
 
 if __name__=="__main__":
