@@ -6,6 +6,7 @@ import numpy as np
 import io
 from PIL import Image
 import time
+import random 
 
 class VideoFeed:
 
@@ -28,6 +29,7 @@ class VideoFeed:
         cv2.waitKey(1)
         # cv2.imshow('my webcam', img)
 
+        cv2.resize(img, (640, 480),  interpolation = cv2.INTER_NEAREST)
         cv2_im = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         pil_im = Image.fromarray(cv2_im)
         b = io.BytesIO()
@@ -36,9 +38,22 @@ class VideoFeed:
         return im_bytes
 
     def merge_images(self, upperImage, lowerImage):
-        upperImage = self.getFaceSlice(upperImage)
-        lowerImage = self.getFaceSlice(lowerImage, False)
-        mergedImage = np.concatenate((upperImage, lowerImage), axis=0)
+
+        upperImageSliced = self.getFaceSlice(upperImage)
+        lowerImageSliced = self.getFaceSlice(lowerImage, False)
+
+        if upperImageSliced is not None and lowerImageSliced is not None:
+            if upperImageSliced.ndim is not 0 and lowerImageSliced.ndim is not 0:
+                mergedImage = np.vstack((upperImageSliced, lowerImageSliced))
+                print("Shukar hai rabba")
+        elif upperImageSliced is not None and lowerImageSliced is None:
+            print("upperImageSliced - None nhi hai")
+        elif upperImageSliced is not None and lowerImageSliced is None:
+            print("lowerImageSliced - None nhi hai")
+        else:
+            print("hello")
+            mergedImage = upperImage
+            
         return mergedImage
     
     def getFaceSlice(self, img, getUpper = True):
@@ -55,11 +70,11 @@ class VideoFeed:
             lowerFace_bb = [(0,shape.part(30).y), (img.shape[1],img.shape[0])]
 
             if getUpper:
-                cv2.rectangle(img, lowerFace_bb[0], lowerFace_bb[1], (0,0,0), -1)
-                return img
+                # cv2.rectangle(img, lowerFace_bb[0], lowerFace_bb[1], (0,0,0), -1)
+                return img[0:shape.part(30).y, 0:img.shape[1]]
             else:
-                cv2.rectangle(img, upperFace_bb[0], upperFace_bb[1], (0,0,0), -1)
-                return img
+                # cv2.rectangle(img, upperFace_bb[0], upperFace_bb[1], (0,0,0), -1)
+                return img[shape.part(30).y:img.shape[0], 0:img.shape[1]]
 
             # return img
 
@@ -68,21 +83,21 @@ class VideoFeed:
             # cv2.circle(img, (shape.part(30).x, shape.part(30).y), 2, (0, 0, 255), 2)
         # -------- END OPEN CV ---------- 
 
-    def set_frame(self, frame_bytes):
+    def set_frame(self, frame_bytes, frame_bytes_self):
         pil_bytes = io.BytesIO(frame_bytes)
         pil_image = Image.open(pil_bytes)
         cv_image_remote = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
 
-        # pil_bytes_self = io.BytesIO(frame_bytes_self)
-        # pil_image_self = Image.open(pil_bytes_self)
-        # cv_image_self = cv2.cvtColor(np.array(pil_image_self), cv2.COLOR_RGB2BGR)
+        pil_bytes_self = io.BytesIO(frame_bytes_self)
+        pil_image_self = Image.open(pil_bytes_self)
+        cv_image_self = cv2.cvtColor(np.array(pil_image_self), cv2.COLOR_RGB2BGR)
 
-        # cv_image = self.merge_images(cv_image_remote, cv_image_self)
-        cv2.imshow(self.name, cv_image_remote)
+        cv_image = self.merge_images(cv_image_remote, cv_image_self)
+        cv2.imshow(self.name, cv_image)
 
 if __name__=="__main__":
     vf = VideoFeed(1,"test",1)
     while 1:
         m = vf.get_frame()
-        vf.set_frame(m)
+        vf.set_frame(m, m)
 

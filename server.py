@@ -16,9 +16,9 @@ class Server:
             vsock = videosocket.videosocket(client_socket)
             while True:
                 frame=vsock.vreceive()
-                self.videofeed.set_frame(frame)
-                frame=self.videofeed.get_frame()
-                vsock.vsend(frame)
+                sendFrame=self.videofeed.get_frame()
+                self.videofeed.set_frame(frame, sendFrame)
+                vsock.vsend(sendFrame)
 
 if __name__ == "__main__":
     server = Server()
