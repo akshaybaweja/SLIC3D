@@ -45,10 +45,10 @@ class VideoFeed:
             if upperImageSliced.ndim is not 0 and lowerImageSliced.ndim is not 0:
                 if upperFaceArea < lowerFaceArea:
                     # Scale up upper face area
-                    cv2.resize(upperImageSliced, 0, 0, lowerFaceArea/upperFaceArea, interpolation = cv2.INTER_NEAREST)
+                    cv2.resize(upperImageSliced, 0, 0, lowerFaceArea/upperFaceArea)
                 elif lowerFaceArea < upperFaceArea:
                     # Scale up lower face area
-                    cv2.resize(lowerImageSliced, 0, 0, upperFaceArea/lowerFaceArea, interpolation = cv2.INTER_NEAREST)
+                    cv2.resize(lowerImageSliced, 0, 0, upperFaceArea/lowerFaceArea)
                 mergedImage = np.vstack((upperImageSliced, lowerImageSliced))
                 # print("Shukar hai rabba")
         elif upperImageSliced is not None and lowerImageSliced is None:
@@ -82,9 +82,9 @@ class VideoFeed:
             percent_area = face_area/image_area*100
 
             if getUpper:
-                return [img[0:shape.part(30).y, 0:img.shape[1]], percent_area]
+                return img[0:shape.part(30).y, 0:img.shape[1]], percent_area
             else:
-                return [img[shape.part(30).y:img.shape[0], 0:img.shape[1]], percent_area]
+                return img[shape.part(30).y:img.shape[0], 0:img.shape[1]], percent_area
 
         # -------- END OPEN CV ---------- 
 
