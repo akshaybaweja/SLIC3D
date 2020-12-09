@@ -47,17 +47,24 @@ class VideoFeed:
             upperImageSliced, upperFaceArea = self.getFaceSlice(upperImage)
             lowerImageSliced, lowerFaceArea = self.getFaceSlice(lowerImage, False)
         except:
-            # LUL
-            print("Gol mal hai bhyi sab gol maal hai")
+            pass
 
         if upperImageSliced is not None and lowerImageSliced is not None:
             if upperImageSliced.ndim is not 0 and lowerImageSliced.ndim is not 0:
                 if upperFaceArea < lowerFaceArea:
                     # Scale up upper face area
-                    cv2.resize(upperImageSliced, lowerFaceArea/upperFaceArea, interpolation = cv2.INTER_AREA)
+                    scale_percent = lowerFaceArea/upperFaceArea # percent of original size
+                    width = int(img.shape[1] * scale_percent)
+                    height = int(img.shape[0] * scale_percent)
+                    dim = (width, height)
+                    cv2.resize(upperImageSliced, dim, interpolation = cv2.INTER_AREA)
                 elif lowerFaceArea < upperFaceArea:
                     # Scale up lower face area
-                    cv2.resize(lowerImageSliced, upperFaceArea/lowerFaceArea, interpolation = cv2.INTER_AREA)
+                    scale_percent = upperFaceArea/lowerFaceArea # percent of original size
+                    width = int(img.shape[1] * scale_percent)
+                    height = int(img.shape[0] * scale_percent)
+                    dim = (width, height)
+                    cv2.resize(lowerImageSliced, dim, interpolation = cv2.INTER_AREA)
                 mergedImage = np.vstack((upperImageSliced, lowerImageSliced))
                 # print("Shukar hai rabba")
         elif upperImageSliced is not None and lowerImageSliced is None:
