@@ -43,6 +43,7 @@ class VideoFeed:
             lowerImageSliced, lowerFaceArea = self.getFaceSlice(lowerImage, False)
         except:
             # LUL
+            print("Gol mal hai bhyi sab gol maal hai")
 
         if upperImageSliced is not None and lowerImageSliced is not None:
             if upperImageSliced.ndim is not 0 and lowerImageSliced.ndim is not 0:
