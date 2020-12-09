@@ -13,10 +13,10 @@ class Client:
 
     def connect(self):
         while True:
-            frame=vsock.vreceive()
             sendFrame=self.videofeed.get_frame()
-            self.videofeed.set_frame(frame, sendFrame)
             vsock.vsend(sendFrame)
+            self.videofeed.set_frame(frame, sendFrame)
+            frame=vsock.vreceive()
 
 if __name__ == "__main__":
     ip_addr = "127.0.0.1"

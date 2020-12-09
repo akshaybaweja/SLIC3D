@@ -15,10 +15,10 @@ class Server:
             print("I got a connection from ", address)
             vsock = videosocket.videosocket(client_socket)
             while True:
-                frame=vsock.vreceive()
                 sendFrame=self.videofeed.get_frame()
-                self.videofeed.set_frame(frame, sendFrame)
                 vsock.vsend(sendFrame)
+                self.videofeed.set_frame(frame, sendFrame)
+                frame=vsock.vreceive()
 
 if __name__ == "__main__":
     server = Server()
