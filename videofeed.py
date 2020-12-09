@@ -45,7 +45,7 @@ class VideoFeed:
         if upperImageSliced is not None and lowerImageSliced is not None:
             if upperImageSliced.ndim is not 0 and lowerImageSliced.ndim is not 0:
                 mergedImage = np.vstack((upperImageSliced, lowerImageSliced))
-[+][]                # print("Shukar hai rabba")
+                # print("Shukar hai rabba")
         elif upperImageSliced is not None and lowerImageSliced is None:
             # print("upperImageSliced - None nhi hai")
             mergedImage = upperImage
