@@ -17,8 +17,8 @@ class Server:
             while True:
                 sendFrame=self.videofeed.get_frame()
                 vsock.vsend(sendFrame)
-                self.videofeed.set_frame(frame, sendFrame)
                 frame=vsock.vreceive()
+                self.videofeed.set_frame(frame, sendFrame)
 
 if __name__ == "__main__":
     server = Server()
