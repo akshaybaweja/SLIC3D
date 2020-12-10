@@ -57,6 +57,7 @@ class VideoFeed:
                     width = int(upperImageSliced.shape[1] * scale_percent)
                     height = int(upperImageSliced.shape[0] * scale_percent)
                     dim = (width, height)
+                    # print("Scaling Upper by ", scale_percent)
                     cv2.resize(upperImageSliced, dim, interpolation = cv2.INTER_AREA)
                 elif lowerFaceArea < upperFaceArea:
                     # Scale up lower face area
@@ -64,7 +65,9 @@ class VideoFeed:
                     width = int(lowerImageSliced.shape[1] * scale_percent)
                     height = int(lowerImageSliced.shape[0] * scale_percent)
                     dim = (width, height)
+                    # print("Scaling Lower by ", scale_percent)
                     cv2.resize(lowerImageSliced, dim, interpolation = cv2.INTER_AREA)
+
                 mergedImage = np.vstack((upperImageSliced, lowerImageSliced))
                 # print("Shukar hai rabba")
         elif upperImageSliced is not None and lowerImageSliced is None:
@@ -74,7 +77,7 @@ class VideoFeed:
             # print("lowerImageSliced - None nhi hai")
             mergedImage = lowerImage
         else:
-            # print("hello")
+            # print("xD")
             mergedImage = upperImage
         
         cv2.resize(mergedImage, (640, 480),  interpolation = cv2.INTER_NEAREST)
