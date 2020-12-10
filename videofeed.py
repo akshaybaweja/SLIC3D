@@ -63,7 +63,6 @@ class VideoFeed:
                     dim = (width, height)
                     # print("Scaling Lower by ", scale_percent)
                     cv2.resize(lowerImageSliced, dim, interpolation = cv2.INTER_AREA)
-
                 mergedImage = np.vstack((upperImageSliced, lowerImageSliced))
                 # print("Shukar hai rabba")
         elif upperImageSliced is not None and lowerImageSliced is None:
@@ -93,8 +92,7 @@ class VideoFeed:
             lowerFace_bb = [(0,shape.part(30).y), (img.shape[1],img.shape[0])]
 
             face_area = face_bb[2] * face_bb[3]
-            image_area = 640*480
-            percent_area = face_area/image_area*100
+            percent_area = face_area/(640*480)*100
             # print(getUpper, face_area, image_area, percent_area)
 
             if getUpper:
@@ -113,10 +111,12 @@ class VideoFeed:
         pil_image_self = Image.open(pil_bytes_self)
         cv_image_self = cv2.cvtColor(np.array(pil_image_self), cv2.COLOR_RGB2BGR)
 
-        cv2.resize(cv_image_self, (640, 480))
-        cv2.resize(cv_image_remote, (640, 480))
+        cv2.resize(cv_image_self, (640, 480), interpolation = cv2.INTER_AREA)
+        cv2.resize(cv_image_remote, (640, 480), interpolation = cv2.INTER_AREA)
 
         cv_image = self.merge_images(cv_image_self, cv_image_remote)
+        cv2.resize(cv_image, (640, 480), interpolation = cv2.INTER_AREA)
+
         cv2.imshow(self.name, cv_image)
 
 if __name__=="__main__":
