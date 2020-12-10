@@ -5,43 +5,30 @@ Fall 2020<br>
 Parsons School of Design x UC Boulder<br>
 
 ## Installation
-----------
 
-To install required libraries run
-```
-pip3 install -r requirements.txt
-```
+Libraries used -
+* <code>opencv-python</code>
+* <code>dlib</code>
+* <code>imutils</code>
+* <code>cmake^</code>
+* <code>imagezmq</code>
 
-### In one session
+> Note: It has only been tested on python 3.7.4
+
+>^ For mac users you need to brew cmake library and not pip install it. cmake is required for running dlib library necessary for face detection and face landmark detection.
+
+### Running Server
 ```
 python server.py
 ```
 
-### Another session
-```
-python client.py [optional ip]
-```
-
-For example, if you are doing locally
+### Running Client
 ```
 python client.py
 ```
+> Note: Edit server \<ip-address\> in client.py before running it.
 
-If the server is on a remote machine
-```
-python client.py {server-ip}
-```
-
-### List Available Cameras
-```
-python client.py
-```
-
-Sample Output
-```
-Port 0 is working and reads images (720.0 x 1280.0)
-Port 1 for camera ( 720.0 x 1280.0) is present but does not reads.
-OpenCV: out device of bound (0-1): 2
-OpenCV: camera failed to properly initialize!
-Port 2 is not working.
-```
+## Contributors
+* [Akshay Baweja](https://akshaybaweja.com)
+* [Pavithra Chandrasekhar]()
+* [Jaclyn Murray]()
