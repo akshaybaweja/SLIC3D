@@ -1,5 +1,4 @@
 import cv2
-# import cvlib as cv
 from imutils import face_utils
 import dlib
 import numpy as np
@@ -19,8 +18,6 @@ class VideoFeed:
 
         if capture == 1:
             self.cam = cv2.VideoCapture(self.camera_index)
-            self.cam.set(3,640)
-            self.cam.set(4,480)
 
     def get_frame(self):
         _, img = self.cam.read()
@@ -28,7 +25,7 @@ class VideoFeed:
         
         cv2.waitKey(1)
         # cv2.imshow('my webcam', img)
-        cv2.resize(img, (640, 480))
+        # cv2.resize(img, (640, 480))
 
         cv2_im = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         pil_im = Image.fromarray(cv2_im)
@@ -57,14 +54,14 @@ class VideoFeed:
                     width = int(upperImageSliced.shape[1] * scale_percent)
                     height = int(upperImageSliced.shape[0] * scale_percent)
                     dim = (width, height)
-                    print("Scaling Upper by ", scale_percent)
+                    # print("Scaling Upper by ", scale_percent)
                     cv2.resize(upperImageSliced, dim, interpolation = cv2.INTER_AREA)
                 elif lowerFaceArea < upperFaceArea:
-                    scale_percent = upperFaceArea/lowerFaceArea # percent of original size
+                    scale_percent = upperFaceArea/lowerFaceArea/100 # percent of original size
                     width = int(lowerImageSliced.shape[1] * scale_percent)
                     height = int(lowerImageSliced.shape[0] * scale_percent)
                     dim = (width, height)
-                    print("Scaling Lower by ", scale_percent)
+                    # print("Scaling Lower by ", scale_percent)
                     cv2.resize(lowerImageSliced, dim, interpolation = cv2.INTER_AREA)
 
                 mergedImage = np.vstack((upperImageSliced, lowerImageSliced))
@@ -115,6 +112,9 @@ class VideoFeed:
         pil_bytes_self = io.BytesIO(frame_bytes_self)
         pil_image_self = Image.open(pil_bytes_self)
         cv_image_self = cv2.cvtColor(np.array(pil_image_self), cv2.COLOR_RGB2BGR)
+
+        cv2.resize(cv_image_self, (640, 480))
+        cv2.resize(cv_image_remote, (640, 480))
 
         cv_image = self.merge_images(cv_image_self, cv_image_remote)
         cv2.imshow(self.name, cv_image)
