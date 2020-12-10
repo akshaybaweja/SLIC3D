@@ -4,7 +4,7 @@ Collab: Elastic Spaces<br>
 Fall 2020<br>
 Parsons School of Design x UC Boulder<br>
 
-![](./resources/display.png)
+![](./resources/display-tiny.png)
 
 ## Installation
 
