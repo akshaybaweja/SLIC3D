@@ -12,7 +12,7 @@ class VideoFeed:
 
     def __init__(self,mode=1,name="w1",capture=1):
         print(name)
-        self.camera_index = 0
+        self.camera_index = 1
         self.name = name
         self.detector = dlib.get_frontal_face_detector()
         self.predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
@@ -28,6 +28,7 @@ class VideoFeed:
         
         cv2.waitKey(1)
         # cv2.imshow('my webcam', img)
+        cv2.resize(img, (640, 480))
 
         cv2_im = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         pil_im = Image.fromarray(cv2_im)
@@ -52,20 +53,18 @@ class VideoFeed:
         if upperImageSliced is not None and lowerImageSliced is not None:
             if upperImageSliced.ndim is not 0 and lowerImageSliced.ndim is not 0:
                 if upperFaceArea < lowerFaceArea:
-                    # Scale up upper face area
                     scale_percent = lowerFaceArea/upperFaceArea # percent of original size
                     width = int(upperImageSliced.shape[1] * scale_percent)
                     height = int(upperImageSliced.shape[0] * scale_percent)
                     dim = (width, height)
-                    # print("Scaling Upper by ", scale_percent)
+                    print("Scaling Upper by ", scale_percent)
                     cv2.resize(upperImageSliced, dim, interpolation = cv2.INTER_AREA)
                 elif lowerFaceArea < upperFaceArea:
-                    # Scale up lower face area
                     scale_percent = upperFaceArea/lowerFaceArea # percent of original size
                     width = int(lowerImageSliced.shape[1] * scale_percent)
                     height = int(lowerImageSliced.shape[0] * scale_percent)
                     dim = (width, height)
-                    # print("Scaling Lower by ", scale_percent)
+                    print("Scaling Lower by ", scale_percent)
                     cv2.resize(lowerImageSliced, dim, interpolation = cv2.INTER_AREA)
 
                 mergedImage = np.vstack((upperImageSliced, lowerImageSliced))
@@ -97,8 +96,9 @@ class VideoFeed:
             lowerFace_bb = [(0,shape.part(30).y), (img.shape[1],img.shape[0])]
 
             face_area = face_bb[2] * face_bb[3]
-            image_area = img.shape[0] * img.shape[1]
+            image_area = 640*480
             percent_area = face_area/image_area*100
+            # print(getUpper, face_area, image_area, percent_area)
 
             if getUpper:
                 return img[0:shape.part(30).y, 0:img.shape[1]], percent_area
