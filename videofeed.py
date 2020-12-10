@@ -11,7 +11,7 @@ class VideoFeed:
 
     def __init__(self,mode=1,name="w1",capture=1):
         print(name)
-        self.camera_index = 1
+        self.camera_index = 0
         self.name = name
         self.detector = dlib.get_frontal_face_detector()
         self.predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
